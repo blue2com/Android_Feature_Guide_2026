@@ -1,0 +1,885 @@
+{
+  "lessons": [
+    {
+      "id": "start",
+      "group": "시작하기",
+      "title": "이 사이트 사용법",
+      "desc": "개별 프로젝트에 필요한 기능을 선택해 개념을 읽고 AI로 구현한 뒤 직접 검증합니다.",
+      "level": "공통",
+      "uses": [
+        "모든 프로젝트"
+      ],
+      "concept": [
+        "이 사이트는 완성 앱을 따라 만드는 강의가 아니라 필요할 때 찾아 쓰는 기술 참고서입니다.",
+        "복습 단원은 전체 교과 흐름에 맞춘 안내이며 원본 슬라이드가 모두 확보된 것은 아닙니다.",
+        "네트워크·날씨 앱 및 UI·알림·카메라 단원은 제공된 강의자료를 바탕으로 정리했습니다."
+      ],
+      "steps": [
+        "왼쪽 목차에서 자신의 프로젝트에 필요한 기능을 찾습니다.",
+        "개념·짧은 코드를 읽고 AI 프롬프트를 프로젝트에 맞게 고칩니다.",
+        "AI가 수정할 파일과 계획을 먼저 검토하고, 기능 하나씩 구현합니다.",
+        "직접 실행 테스트를 하고 왜 동작하는지 설명할 수 있는지 점검합니다."
+      ],
+      "code": "사용자 요구 → 설계·파일 확인 → AI 구현 → Gradle 빌드 → 에뮬레이터 테스트 → Git 커밋",
+      "prompt": "현재 Android Studio 프로젝트를 읽고 구조를 요약해 줘. 기존 코드를 먼저 분석하고, 필요한 최소 변경 계획과 수정 예상 파일을 제시해 줘. 내 승인 없이 다른 기능을 바꾸지 마. 구현 후 실제 수행한 검증과 미수행 검증을 구분해 보고해 줘.",
+      "checks": [
+        "기본 앱이 실행되는가?",
+        "변경 전 Git 커밋을 남겼는가?",
+        "AI가 변경한 파일과 이유를 파악했는가?"
+      ],
+      "questions": [
+        "기능이 동작한 것과 코드가 올바른 것은 어떻게 다른가?",
+        "빌드 성공으로 확인되지 않는 문제는 무엇인가?"
+      ],
+      "notes": "AI 결과가 테스트를 수행했다는 주장은 로그·기기 실행 화면으로 확인해야 합니다.",
+      "refs": []
+    },
+    {
+      "id": "kotlin",
+      "group": "기초 복습",
+      "title": "Kotlin 핵심 문법",
+      "desc": "null 안전성, data class, 람다, suspend 함수 등 Compose 앱에서 반복 등장하는 표현.",
+      "level": "복습",
+      "uses": [
+        "모든 프로젝트"
+      ],
+      "concept": [
+        "val은 재할당하지 않는 참조, var는 재할당 가능한 참조입니다.",
+        "data class는 DTO·UI 모델에 자주 사용합니다.",
+        "nullable 타입과 ?. / ?: / ?: return 같은 처리를 구분합니다.",
+        "suspend는 코루틴 안에서 중단 가능한 함수를 선언하지만 자동으로 백그라운드 스레드에서 실행되는 것은 아닙니다."
+      ],
+      "steps": [
+        "현재 프로젝트에서 data class 세 개를 찾습니다.",
+        "nullable 데이터가 화면까지 전달되는 과정을 확인합니다.",
+        "suspend 함수의 호출 위치와 실패 처리를 추적합니다."
+      ],
+      "code": "data class Trip(val id: String, val title: String, val note: String?)\nval displayNote = trip.note?.takeIf { it.isNotBlank() } ?: \"기록 없음\"",
+      "prompt": "이 프로젝트의 data class, nullable 처리, suspend 함수를 찾아 역할을 설명해 줘. 코드를 임의 변경하지 말고 파일 경로와 함께 개념을 설명해 줘.",
+      "checks": [
+        "널 입력에 안전한가?",
+        "반복되는 변환 코드가 없는가?"
+      ],
+      "questions": [
+        "suspend와 launch의 차이는?",
+        "?.와 !!의 차이는?"
+      ],
+      "notes": "",
+      "refs": []
+    },
+    {
+      "id": "compose",
+      "group": "기초 복습",
+      "title": "Compose UI 구성",
+      "desc": "Composable, Column/Row/Box, Material3, LazyColumn, 상태에 따른 재구성.",
+      "level": "복습",
+      "uses": [
+        "일정",
+        "커뮤니티",
+        "분실물"
+      ],
+      "concept": [
+        "@Composable 함수는 UI를 선언하며 상태가 바뀌면 필요한 부분이 재구성됩니다.",
+        "LazyColumn은 긴 목록의 항목을 지연 구성합니다.",
+        "UI 이벤트와 데이터 변경 로직을 분리합니다."
+      ],
+      "steps": [
+        "화면을 작은 Composable로 나눕니다.",
+        "목록 화면에 빈 상태·로딩 상태를 표현합니다.",
+        "상태가 바뀔 때 UI가 갱신되는지 확인합니다."
+      ],
+      "code": "@Composable\nfun TripRow(title: String, onOpen: () -> Unit) {\n    ListItem(\n        headlineContent = { Text(title) },\n        modifier = Modifier.clickable(onClick = onOpen)\n    )\n}",
+      "prompt": "현재 화면의 Compose 컴포넌트 구조를 분석하고, 목록 항목을 재사용 가능한 Composable로 추출해 줘. 기존 기능을 유지하고 Preview 또는 실행 결과로 검증해 줘.",
+      "checks": [
+        "화면 크기가 달라도 읽기 쉬운가?",
+        "빈 목록과 긴 목록에서 정상인가?"
+      ],
+      "questions": [
+        "Compose의 재구성은 언제 발생하는가?",
+        "UI에 DB 접근 코드를 직접 쓰면 왜 곤란한가?"
+      ],
+      "notes": "",
+      "refs": []
+    },
+    {
+      "id": "state",
+      "group": "기초 복습",
+      "title": "상태 관리·ViewModel",
+      "desc": "remember, mutableStateOf, StateFlow, collectAsStateWithLifecycle, 단방향 데이터 흐름.",
+      "level": "복습",
+      "uses": [
+        "모든 프로젝트"
+      ],
+      "concept": [
+        "화면 내부 일시적 상태는 remember/rememberSaveable, 지속되는 화면 상태는 ViewModel에서 관리합니다.",
+        "ViewModel이 StateFlow로 UiState를 내보내고 Compose는 lifecycle-aware 수집을 사용합니다.",
+        "UI → ViewModel 이벤트 → 상태 업데이트 → UI의 단방향 흐름을 유지합니다."
+      ],
+      "steps": [
+        "현재 화면에서 상태의 소유자를 찾습니다.",
+        "loading/success/error를 구분해 표시합니다.",
+        "화면 재생성 뒤 값이 유지되는지 관찰합니다."
+      ],
+      "code": "val uiState by viewModel.uiState.collectAsStateWithLifecycle()\nwhen (val state = uiState) {\n    is UiState.Loading -> CircularProgressIndicator()\n    is UiState.Error -> Text(state.message)\n    is UiState.Success -> Text(state.data.title)\n}",
+      "prompt": "현재 화면에서 상태 소유권을 분석하고 ViewModel의 StateFlow와 collectAsStateWithLifecycle 패턴으로 정리할 수 있는지 제안해 줘. 무조건 수정하지 말고 변경 사유를 먼저 알려 줘.",
+      "checks": [
+        "화면 회전 후 일시 상태 처리가 적절한가?",
+        "오류·로딩·빈 상태가 존재하는가?"
+      ],
+      "questions": [
+        "rememberSaveable과 ViewModel의 차이는?",
+        "StateFlow가 전달하는 값은 어디에서 갱신되는가?"
+      ],
+      "notes": "",
+      "refs": []
+    },
+    {
+      "id": "scaffold",
+      "group": "기초 복습",
+      "title": "Scaffold·화면 구조",
+      "desc": "TopAppBar, FloatingActionButton, SnackbarHost 및 UI 구성.",
+      "level": "복습",
+      "uses": [
+        "모든 프로젝트"
+      ],
+      "concept": [
+        "Scaffold는 앱의 상단 바, 하단 바, FAB, SnackbarHost의 기본 골격을 제공합니다.",
+        "content의 innerPadding을 전달해 시스템 및 바 영역과 겹침을 줄입니다."
+      ],
+      "steps": [
+        "Scaffold에 상단 바를 배치합니다.",
+        "콘텐츠에 innerPadding을 적용합니다.",
+        "FAB 이벤트를 ViewModel 또는 화면 콜백과 연결합니다."
+      ],
+      "code": "Scaffold(\n    topBar = { TopAppBar(title = { Text(\"내 여행\") }) },\n    floatingActionButton = { FloatingActionButton(onClick = onAdd) { Text(\"+\") } }\n) { innerPadding ->\n    TripList(Modifier.padding(innerPadding))\n}",
+      "prompt": "현재 Compose 화면의 Scaffold 구성을 점검해 줘. innerPadding 적용 여부와 FAB 이벤트 연결을 확인하고 필요한 최소 수정만 제안해 줘.",
+      "checks": [
+        "콘텐츠가 상단 바에 가려지지 않는가?",
+        "버튼이 올바른 이벤트를 호출하는가?"
+      ],
+      "questions": [
+        "innerPadding의 용도는?"
+      ],
+      "notes": "",
+      "refs": []
+    },
+    {
+      "id": "navigation",
+      "group": "기초 복습",
+      "title": "Navigation·화면 간 전달",
+      "desc": "화면 경로와 인자 전달, 잘못된 인자 처리, 상세 화면 이동.",
+      "level": "복습",
+      "uses": [
+        "여행",
+        "분실물",
+        "일정"
+      ],
+      "concept": [
+        "목록에서 ID를 전달하고 상세 화면은 저장소에서 해당 ID로 조회하는 패턴을 권장합니다.",
+        "잘못된 숫자 인자를 0.0 등 임의 좌표로 바꾸면 오류를 숨길 수 있습니다."
+      ],
+      "steps": [
+        "화면 이동 경로를 문서화합니다.",
+        "존재하지 않는 ID로 접근해 오류 화면을 확인합니다.",
+        "뒤로 이동할 때 상태가 적절한지 확인합니다."
+      ],
+      "code": "// 핵심 원칙: 전체 객체보다 안정된 식별자를 전달\nnavController.navigate(\"trip/${trip.id}\")",
+      "prompt": "프로젝트의 Navigation 그래프를 읽고 목록→상세 이동에서 어떤 인자를 넘기는지 조사해 줘. 잘못된 ID나 누락된 인자 처리도 함께 점검해 줘.",
+      "checks": [
+        "유효하지 않은 ID에서도 앱이 종료되지 않는가?",
+        "상세 화면에서 최신 데이터를 다시 조회하는가?"
+      ],
+      "questions": [
+        "전체 객체 대신 ID 전달이 유리한 이유는?"
+      ],
+      "notes": "",
+      "refs": []
+    },
+    {
+      "id": "room",
+      "group": "데이터·아키텍처",
+      "title": "Room 로컬 저장",
+      "desc": "Entity, DAO, Database, Repository 그리고 변경 사항을 UI에 반영하는 흐름.",
+      "level": "핵심",
+      "uses": [
+        "모든 프로젝트"
+      ],
+      "concept": [
+        "Entity는 로컬 테이블 구조, DAO는 쿼리 접근, Database는 진입점입니다.",
+        "Repository는 데이터 소스와 ViewModel 사이의 계약을 담당합니다.",
+        "UI에서 직접 DAO를 사용하지 않도록 책임을 분리합니다."
+      ],
+      "steps": [
+        "저장할 데이터의 고유 ID를 정합니다.",
+        "Entity·DAO·Repository·ViewModel 역할을 분리합니다.",
+        "앱을 종료했다 재실행해도 데이터가 남는지 확인합니다."
+      ],
+      "code": "@Entity(tableName = \"trips\")\ndata class TripEntity(\n    @PrimaryKey val id: String,\n    val title: String,\n    val startDate: String\n)\n\n@Dao\ninterface TripDao {\n    @Query(\"SELECT * FROM trips\")\n    fun observeAll(): Flow<List<TripEntity>>\n}",
+      "prompt": "현재 프로젝트의 Room Entity·DAO·Database·Repository를 찾아 데이터 흐름을 그려 줘. 새 기능에서 필요한 필드 추가 시 마이그레이션 방법과 테스트 계획을 먼저 설명해 줘.",
+      "checks": [
+        "저장 후 앱 재시작 시 값이 남는가?",
+        "Entity 변경 시 마이그레이션이 필요한가?",
+        "ID 중복을 방지하는가?"
+      ],
+      "questions": [
+        "DAO와 Repository의 책임 차이는?",
+        "Flow로 조회했을 때 UI가 갱신되는 경로는?"
+      ],
+      "notes": "",
+      "refs": []
+    },
+    {
+      "id": "hilt",
+      "group": "데이터·아키텍처",
+      "title": "Hilt 의존성 주입",
+      "desc": "@HiltAndroidApp, @AndroidEntryPoint, @HiltViewModel, @Module/@Provides의 연결.",
+      "level": "핵심",
+      "uses": [
+        "모든 프로젝트"
+      ],
+      "concept": [
+        "객체를 화면에서 매번 생성하지 않고 필요한 의존성을 주입합니다.",
+        "Database/DAO/Repository의 생명주기를 고려해 제공 방식을 설계합니다."
+      ],
+      "steps": [
+        "Application·Activity의 애너테이션을 찾습니다.",
+        "ViewModel에 주입된 생성자 의존성을 추적합니다.",
+        "테스트 대체 구현이 가능하도록 인터페이스를 검토합니다."
+      ],
+      "code": "@HiltViewModel\nclass TripViewModel @Inject constructor(\n    private val repository: TripRepository\n) : ViewModel()",
+      "prompt": "현재 프로젝트의 Hilt 구성요소와 주입 그래프를 분석해 줘. Application, Activity, ViewModel, Module을 연결하는 표를 작성하고 중복 singleton 생성 문제를 검토해 줘.",
+      "checks": [
+        "Hilt 초기화가 정상인가?",
+        "순환 의존성이 없는가?"
+      ],
+      "questions": [
+        "@Inject constructor와 @Provides는 언제 구분하는가?"
+      ],
+      "notes": "",
+      "refs": []
+    },
+    {
+      "id": "datastore",
+      "group": "데이터·아키텍처",
+      "title": "DataStore 환경설정",
+      "desc": "테마·사용자 설정 같은 간단한 key-value 데이터 저장.",
+      "level": "복습",
+      "uses": [
+        "모든 프로젝트"
+      ],
+      "concept": [
+        "DataStore는 간단한 환경설정이나 사용자 기본값 저장에 적합합니다.",
+        "복잡한 관계형 기록은 Room 같은 구조화된 DB에 둡니다."
+      ],
+      "steps": [
+        "저장할 값이 설정인지 도메인 기록인지 구분합니다.",
+        "설정 변경 후 앱 재시작 시 유지되는지 검증합니다."
+      ],
+      "code": "val Context.dataStore by preferencesDataStore(name = \"settings\")\nval DARK_MODE = booleanPreferencesKey(\"dark_mode\")",
+      "prompt": "현재 프로젝트에서 설정값을 저장할 필요가 있는지 검토해 줘. Room과 DataStore의 선택 기준을 설명하고 최소 구조를 제안해 줘.",
+      "checks": [
+        "설정 저장 후 복원되는가?"
+      ],
+      "questions": [
+        "Room과 DataStore를 언제 구분하는가?"
+      ],
+      "notes": "",
+      "refs": []
+    },
+    {
+      "id": "retrofit",
+      "group": "네트워크",
+      "title": "Retrofit·JSON API",
+      "desc": "HTTP GET, API 인터페이스, DTO, kotlinx.serialization, 오류 처리.",
+      "level": "자료 확인",
+      "uses": [
+        "날씨",
+        "검색",
+        "외부 API"
+      ],
+      "concept": [
+        "네트워크 학습에서는 JSONPlaceholder로 GET 개념을 익히고 Open-Meteo Weather App으로 확장합니다.",
+        "Retrofit은 HTTP 인터페이스 호출을 객체로 연결하며 DTO는 서버의 JSON 응답 구조를 표현합니다.",
+        "kotlinx.serialization을 사용하며 알 수 없는 JSON 필드에는 ignoreUnknownKeys를 적용할 수 있습니다."
+      ],
+      "steps": [
+        "서버 API 문서의 URL과 JSON 응답을 먼저 읽습니다.",
+        "@Serializable DTO와 Retrofit 인터페이스를 정의합니다.",
+        "Repository에서 오류를 구분하고 ViewModel에서 UiState로 전달합니다.",
+        "네트워크 연결을 끊고 실패 화면을 테스트합니다."
+      ],
+      "code": "@Serializable\ndata class PostDto(val id: Int, val title: String)\n\ninterface PostApi {\n    @GET(\"posts\")\n    suspend fun getPosts(): List<PostDto>\n}\n// Retrofit Builder에 kotlinx.serialization ConverterFactory 등록",
+      "prompt": "현재 프로젝트에 외부 GET API 연결 기능이 필요해. API 문서의 JSON 구조를 확인한 뒤 kotlinx.serialization DTO, Retrofit 인터페이스, Repository, ViewModel, Compose UI로 분리해 구현해 줘. CancellationException은 재전파하고, 타임아웃·HTTP 오류·네트워크 실패를 테스트해 줘.",
+      "checks": [
+        "정상 응답이 표시되는가?",
+        "인터넷 연결 끊김에서 오류 상태가 표시되는가?",
+        "취소된 코루틴이 예외 처리로 삼켜지지 않는가?"
+      ],
+      "questions": [
+        "DTO와 Entity의 차이는?",
+        "Retrofit Converter가 필요한 이유는?"
+      ],
+      "notes": "출처: 제공된 Retrofit·날씨 앱 강의자료와 코드 읽기 가이드. 샘플 코드는 이해용 발췌이며 프로젝트 의존성/임포트는 생략했습니다.",
+      "refs": [
+        "NETWORK_LESSON"
+      ]
+    },
+    {
+      "id": "weather",
+      "group": "네트워크",
+      "title": "Weather App 코드 읽기",
+      "desc": "Open-Meteo 호출 흐름: City → Navigation → Api → Repository → UiState → WeatherScreen.",
+      "level": "자료 확인",
+      "uses": [
+        "날씨 앱"
+      ],
+      "concept": [
+        "날씨 API 호출은 화면에서 직접 하지 않고 Repository를 거칩니다.",
+        "City에서 위도·경도를 선택하고 OpenMeteoApi가 요청합니다.",
+        "WeatherScreen은 collectAsStateWithLifecycle로 상태를 수집합니다."
+      ],
+      "steps": [
+        "CityScreen에서 서울을 선택합니다.",
+        "AppNav가 인자를 넘기는 코드를 찾습니다.",
+        "OpenMeteoApi와 DTO를 읽고 WeatherRepository에서 응답을 확인합니다.",
+        "WeatherViewModel과 WeatherScreen의 상태 표시를 추적합니다."
+      ],
+      "code": "CityScreen → AppNav → WeatherViewModel → WeatherRepository\n       → OpenMeteoApi → Open-Meteo 서버 → DTO\n       → UiState → WeatherScreen",
+      "prompt": "Weather App의 실제 파일 구조를 탐색해서 도시 선택부터 날씨 표시까지 호출 흐름을 표로 정리해 줘. 코드 변경은 하지 말고 파악한 파일 경로와 예외 처리의 한계를 보고해 줘.",
+      "checks": [
+        "다른 도시의 데이터가 다르게 나오는가?",
+        "날짜/시간대가 올바른가?",
+        "네트워크 실패 시 오류가 표시되는가?"
+      ],
+      "questions": [
+        "safeApiCall에서 CancellationException을 왜 다시 throw해야 하는가?",
+        "timezone=auto는 어떤 의미인가?"
+      ],
+      "notes": "제공된 코드 읽기 가이드 기준이며, 실제 학생 프로젝트 파일과 차이가 있을 수 있습니다.",
+      "refs": [
+        "NETWORK_LESSON"
+      ]
+    },
+    {
+      "id": "dialogs",
+      "group": "UI 기능",
+      "title": "AlertDialog·삭제 확인",
+      "desc": "위험한 작업을 실행하기 전 확인받는 사용자 인터페이스.",
+      "level": "자료 확인",
+      "uses": [
+        "분실물",
+        "게시글",
+        "여행 기록"
+      ],
+      "concept": [
+        "AlertDialog는 영구 삭제 등 되돌리기 어려운 작업을 확인하는 데 적합합니다.",
+        "삭제 상태와 실제 DB 삭제는 별도 로직으로 분리합니다."
+      ],
+      "steps": [
+        "삭제 버튼 클릭 때 다이얼로그를 엽니다.",
+        "취소를 누르면 데이터는 그대로 둡니다.",
+        "확인 후 실제 삭제를 수행합니다."
+      ],
+      "code": "if (showDeleteDialog) {\n    AlertDialog(\n        onDismissRequest = { showDeleteDialog = false },\n        title = { Text(\"삭제 확인\") },\n        text = { Text(\"정말 삭제할까요?\") },\n        confirmButton = { TextButton(onClick = onDelete) { Text(\"삭제\") } },\n        dismissButton = { TextButton(onClick = { showDeleteDialog = false }) { Text(\"취소\") } }\n    )\n}",
+      "prompt": "현재 목록의 삭제 버튼에 AlertDialog를 추가해 줘. 취소하면 데이터가 변경되지 않고 확인 시에만 Repository를 통해 삭제하도록 해 줘. 기존 UI를 유지하고 검증 항목을 보고해 줘.",
+      "checks": [
+        "취소 시 아무것도 삭제되지 않는가?",
+        "삭제 후 목록이 갱신되는가?"
+      ],
+      "questions": [
+        "showDeleteDialog 상태는 어디에 두는 것이 좋은가?"
+      ],
+      "notes": "",
+      "refs": [
+        "UI_SYSTEM_LESSON"
+      ]
+    },
+    {
+      "id": "selection",
+      "group": "UI 기능",
+      "title": "BottomSheet·Dropdown·날짜 선택",
+      "desc": "메뉴, 카테고리, 날짜·시간 입력을 위한 UI 패턴.",
+      "level": "자료 확인",
+      "uses": [
+        "일정",
+        "여행",
+        "게시판"
+      ],
+      "concept": [
+        "BottomSheet는 추가 동작을 제시할 때, ExposedDropdown은 선택지 중 하나를 고를 때 사용합니다.",
+        "DatePicker는 날짜 선택, TimePicker는 시간 선택을 보조합니다.",
+        "Material3의 menuAnchor API는 버전에 따라 시그니처를 확인해야 합니다."
+      ],
+      "steps": [
+        "종류 선택과 날짜/시간 선택의 입력 모델을 정합니다.",
+        "저장 전 값이 유효한지 확인합니다.",
+        "날짜 문자열과 시간대 변환을 구분합니다."
+      ],
+      "code": "// Material3 버전에 따른 API 확인\n// 읽기 전용 필드라면 PrimaryNotEditable 앵커 유형 검토\n// DatePickerState.selectedDateMillis는 UTC 기반 날짜 표현에 주의",
+      "prompt": "현재 등록 화면에 카테고리 선택 Dropdown과 날짜 선택 DatePicker를 추가해 줘. 사용 중인 Material3 버전에 맞는 메뉴 앵커 API를 확인하고 잘못된 기간 입력을 차단해 줘.",
+      "checks": [
+        "종료일이 시작일보다 빠르지 않은가?",
+        "시간대 경계에서 날짜가 밀리지 않는가?"
+      ],
+      "questions": [
+        "BottomSheet와 Dialog 중 어떤 상황에 무엇을 고르는가?"
+      ],
+      "notes": "",
+      "refs": [
+        "UI_SYSTEM_LESSON"
+      ]
+    },
+    {
+      "id": "feedback",
+      "group": "UI 기능",
+      "title": "Toast·Snackbar·실행 취소",
+      "desc": "사용자에게 일시적인 작업 결과를 안내하는 UI.",
+      "level": "자료 확인",
+      "uses": [
+        "모든 프로젝트"
+      ],
+      "concept": [
+        "Toast는 짧은 안내, Snackbar는 화면 내 알림과 실행 취소 액션을 제공할 수 있습니다.",
+        "실행 취소는 UI만 복구하는 것이 아니라 저장소의 데이터 일관성도 고려해야 합니다."
+      ],
+      "steps": [
+        "저장 성공을 Snackbar로 표시합니다.",
+        "삭제 후 취소 액션을 제공합니다.",
+        "화면 이동 시 메시지가 중복되지 않는지 확인합니다."
+      ],
+      "code": "val result = snackbarHostState.showSnackbar(\n    message = \"항목을 삭제했습니다\",\n    actionLabel = \"실행 취소\"\n)\nif (result == SnackbarResult.ActionPerformed) {\n    viewModel.restoreDeletedItem()\n}",
+      "prompt": "삭제 후 Snackbar에 실행 취소 액션을 추가해 줘. 데이터 복구도 포함하고 연속 삭제 또는 화면 이탈 시 동작을 정의해 줘. 중복 이벤트도 점검해 줘.",
+      "checks": [
+        "취소하면 실제 저장소도 복구되는가?",
+        "짧은 시간에 여러 번 삭제해도 일관성이 유지되는가?"
+      ],
+      "questions": [
+        "Toast와 Snackbar를 구분하는 기준은?"
+      ],
+      "notes": "",
+      "refs": [
+        "UI_SYSTEM_LESSON"
+      ]
+    },
+    {
+      "id": "notification",
+      "group": "시스템 기능",
+      "title": "Notification·채널·권한",
+      "desc": "앱 밖에서도 사용자에게 알림을 전달하는 Android 시스템 기능.",
+      "level": "자료 확인",
+      "uses": [
+        "일정",
+        "분실물",
+        "알림"
+      ],
+      "concept": [
+        "Android 8.0+는 NotificationChannel을 사용합니다.",
+        "Android 13+에서는 일반 알림에 POST_NOTIFICATIONS 런타임 권한이 필요합니다.",
+        "PendingIntent는 사용자가 알림을 탭했을 때 실행할 대상 작업을 표현합니다."
+      ],
+      "steps": [
+        "채널을 생성합니다.",
+        "알림 시점에 권한 및 알림 활성화 상태를 확인합니다.",
+        "알림 탭 시 올바른 상세 화면으로 이동하도록 설정합니다."
+      ],
+      "code": "val channel = NotificationChannel(\n    \"reminders\", \"일정 알림\", NotificationManager.IMPORTANCE_DEFAULT\n)\nnotificationManager.createNotificationChannel(channel)\n// API 26 이상에서 실행하도록 버전 분기 필요",
+      "prompt": "내 앱의 특정 이벤트에 대해 시스템 Notification을 추가해 줘. Android 13+ POST_NOTIFICATIONS, Android 8+ Channel, 탭 시 상세 화면 PendingIntent를 반영해 줘. 권한 거부 시의 동작도 설계해 줘.",
+      "checks": [
+        "권한 거부 시 크래시가 없는가?",
+        "알림 클릭으로 정확한 항목이 열리는가?",
+        "채널 설정 변경 후의 동작을 이해했는가?"
+      ],
+      "questions": [
+        "채널이 필요한 이유는?",
+        "PendingIntent와 일반 Intent의 차이는?"
+      ],
+      "notes": "일반 알림은 사용자 허용이 필요합니다. 예외적 알림 유형/플랫폼 버전 차이는 공식 문서 확인.",
+      "refs": [
+        "UI_SYSTEM_LESSON",
+        "ANDROID_NOTIFICATION"
+      ]
+    },
+    {
+      "id": "alarms",
+      "group": "시스템 기능",
+      "title": "AlarmManager·BroadcastReceiver",
+      "desc": "사용자가 지정한 시점에 리마인더를 예약하고 앱 내부 Receiver가 수신.",
+      "level": "자료 확인",
+      "uses": [
+        "일정",
+        "습관 관리",
+        "여행"
+      ],
+      "concept": [
+        "AlarmManager는 특정 시간의 예약에 사용하고 WorkManager는 지연 가능한 백그라운드 작업에 적합합니다.",
+        "Android 14의 정확한 알람 접근은 많은 신규 설치 앱에서 기본 허용되지 않습니다.",
+        "예약 ID는 실제 DB에 저장된 항목 ID를 기준으로 하며 수정·삭제 시 갱신·취소해야 합니다."
+      ],
+      "steps": [
+        "알림 예약 시점을 정의합니다.",
+        "정확한 시각이 반드시 필요한지 판단합니다.",
+        "Receiver에서 알림을 생성하고 예약 취소·수정·재부팅 정책을 정합니다."
+      ],
+      "code": "화면 → ReminderScheduler → AlarmManager\n                           ↓ (예약 시각)\n                    BroadcastReceiver\n                           ↓\n                      Notification",
+      "prompt": "사용자가 지정한 일정 알림을 예약해 줘. 일반 알람과 정확한 알람의 선택 이유를 먼저 설명하고, canScheduleExactAlarms, 권한 거부 대체 동작, DB ID 기반 PendingIntent, 수정·삭제 시 재예약/취소까지 설계해 줘.",
+      "checks": [
+        "일정 수정 후 이전 알림이 남지 않는가?",
+        "삭제 후 알림이 오지 않는가?",
+        "정확한 알람 접근 거부에 대응하는가?"
+      ],
+      "questions": [
+        "AlarmManager와 WorkManager의 선택 기준은?",
+        "Receiver를 exported=false로 설정할 수 있는 이유는?"
+      ],
+      "notes": "정확한 알람은 정책·권한 제약이 있으므로 필수 실습으로 강요하지 않습니다.",
+      "refs": [
+        "UI_SYSTEM_LESSON",
+        "ANDROID_ALARM"
+      ]
+    },
+    {
+      "id": "camera",
+      "group": "시스템 기능",
+      "title": "카메라·FileProvider·Photo Picker",
+      "desc": "촬영 사진 또는 갤러리 이미지를 앱 데이터에 연결.",
+      "level": "자료 확인",
+      "uses": [
+        "여행",
+        "분실물",
+        "게시글"
+      ],
+      "concept": [
+        "시스템 카메라 앱에 ActivityResultContracts.TakePicture를 요청하는 흐름은 앱이 직접 카메라 하드웨어를 제어하는 것과 다릅니다.",
+        "앱 전용 파일을 FileProvider의 content URI로 전달하면 CAMERA/저장소 권한 없이 설계할 수 있습니다.",
+        "이미지 선택은 Photo Picker를 우선 검토합니다."
+      ],
+      "steps": [
+        "앱 전용 사진 파일과 content URI를 만듭니다.",
+        "촬영 결과가 true인 경우에만 사진을 기록에 연결합니다.",
+        "큰 원본 비트맵을 Composable에서 직접 디코딩하지 않습니다."
+      ],
+      "code": "val launcher = rememberLauncherForActivityResult(\n    contract = ActivityResultContracts.TakePicture(),\n    onResult = { success -> /* 성공 시 URI를 기록에 연결 */ }\n)\n// launcher.launch(fileProviderUri)",
+      "prompt": "내 앱에 사진 촬영 및 기존 사진 선택 기능을 추가해 줘. 시스템 카메라 TakePicture + FileProvider 및 Photo Picker를 사용하고 불필요한 CAMERA/저장소 권한을 요청하지 않도록 해 줘. 앱 재시작 뒤 URI 접근, 썸네일 성능도 검토해 줘.",
+      "checks": [
+        "촬영 취소 시 빈 이미지가 남지 않는가?",
+        "앱 재시작 후 이미지가 보이는가?",
+        "대형 이미지에서 UI 멈춤이 없는가?"
+      ],
+      "questions": [
+        "FileProvider의 content URI가 필요한 이유는?",
+        "TakePicture와 CameraX의 차이는?"
+      ],
+      "notes": "",
+      "refs": [
+        "UI_SYSTEM_LESSON"
+      ]
+    },
+    {
+      "id": "permissions",
+      "group": "시스템 기능",
+      "title": "권한·플랫폼 버전별 분기",
+      "desc": "필요한 시점에 최소한의 권한을 요청하고 거부도 정상 처리합니다.",
+      "level": "자료 확인",
+      "uses": [
+        "알림",
+        "카메라",
+        "위치"
+      ],
+      "concept": [
+        "Android 권한은 기능마다 다르며 모든 사진 기능이 저장소 권한을 필요로 하지는 않습니다.",
+        "권한 거부·일시 거부·영구 거부 및 설정 화면 복귀 흐름을 테스트해야 합니다."
+      ],
+      "steps": [
+        "기능에 필요한 실제 권한을 확인합니다.",
+        "요청 전에 이유를 설명하고 사용자 액션에 맞춰 요청합니다.",
+        "권한 거부 시 가능한 대체 UI를 제공합니다."
+      ],
+      "code": "val launcher = rememberLauncherForActivityResult(\n    ActivityResultContracts.RequestPermission()\n) { granted -> /* 허용/거부 UI 갱신 */ }",
+      "prompt": "이 앱에서 실제로 필요한 런타임 권한을 표로 정리해 줘. API 레벨별 차이, 권한을 요청하는 사용자 행동, 거부 시 대체 동작, 불필요한 권한 제거를 검토해 줘.",
+      "checks": [
+        "권한이 없어도 가능한 기능은 동작하는가?",
+        "거부 후 다시 시도할 수 있는가?"
+      ],
+      "questions": [
+        "최소 권한 원칙은 무엇인가?"
+      ],
+      "notes": "",
+      "refs": [
+        "UI_SYSTEM_LESSON"
+      ]
+    },
+    {
+      "id": "firebase",
+      "group": "확장",
+      "title": "Firebase Auth·Firestore·Storage",
+      "desc": "기록 메타데이터와 사진 파일을 클라우드에 분리 저장하고 사용자별 접근을 제한.",
+      "level": "확장",
+      "uses": [
+        "여행",
+        "커뮤니티",
+        "공유"
+      ],
+      "concept": [
+        "Auth는 사용자 식별, Firestore는 구조화 데이터, Cloud Storage는 사진 파일 저장을 맡습니다.",
+        "사진 바이트를 Firestore에 저장하기보다 Storage 경로를 문서에 기록합니다.",
+        "인증만 설정하고 보안 규칙을 방치하면 타인의 데이터에 접근될 수 있습니다.",
+        "Firebase Android에서는 더 이상 별도 KTX 모듈에 의존하지 않고 메인 모듈을 사용합니다."
+      ],
+      "steps": [
+        "Firebase 프로젝트와 앱 식별자를 연결합니다.",
+        "로그인 및 사용자별 문서 경로를 설계합니다.",
+        "Firestore Security Rules를 작성하고 Emulator Suite로 테스트합니다.",
+        "사진 업로드 실패와 메타데이터 저장 실패를 별도 처리합니다."
+      ],
+      "code": "users/{uid}/trips/{tripId}\n  title, startDate, updatedAt, photoStoragePath\n\nStorage 예시:\nusers/{uid}/trips/{tripId}/{photoId}.jpg",
+      "prompt": "이 프로젝트를 Firebase Auth·Firestore·Storage로 확장할 설계를 제안해 줘. 사용자별 보안 규칙, 비용/결제 요건, 실패 시 일관성, 최신 Firebase 메인 모듈 의존성을 먼저 확인하고 최소 구현부터 수행해 줘.",
+      "checks": [
+        "로그아웃/다른 계정으로 남의 기록을 볼 수 없는가?",
+        "업로드 실패 시 기록이 깨지지 않는가?",
+        "요금과 보안 규칙을 점검했는가?"
+      ],
+      "questions": [
+        "Firestore와 Storage에 무엇을 각각 저장하는가?",
+        "Auth와 Rules는 어떤 관계인가?"
+      ],
+      "notes": "Cloud Storage 사용 전에 Firebase 요금제와 과금 조건을 반드시 확인하세요.",
+      "refs": [
+        "FIREBASE_KTX"
+      ]
+    },
+    {
+      "id": "sync",
+      "group": "확장",
+      "title": "Room ↔ Firebase 동기화 설계",
+      "desc": "오프라인 데이터와 클라우드 기록을 모두 쓰는 경우에만 추가하는 심화 주제.",
+      "level": "확장",
+      "uses": [
+        "오프라인 앱"
+      ],
+      "concept": [
+        "Firestore에는 자체 오프라인 캐시가 있으므로 별도 Room 복제의 필요성을 먼저 판단해야 합니다.",
+        "Room과 Firestore를 모두 쓰면 식별자, 마지막 수정 시각, 삭제 표시, 충돌 해결 규칙이 필요합니다."
+      ],
+      "steps": [
+        "로컬 우선인지 서버 우선인지 선택합니다.",
+        "UUID 기반 ID와 syncStatus·updatedAt를 설계합니다.",
+        "기기 두 대의 동시 수정 및 삭제 충돌을 실험합니다."
+      ],
+      "code": "Trip(id, ownerId, title, updatedAt, deletedAt, syncStatus)\n// 실제 동기화 정책을 정의하기 전 단순 양방향 복사를 금지",
+      "prompt": "내 앱에서 Room과 Firestore를 모두 유지할 필요가 있는지 먼저 비교해 줘. 필요하다면 소유권, 충돌 해결, 삭제 전파, 재시도와 중복 업로드 방지 설계를 문서로 작성해 줘.",
+      "checks": [
+        "오프라인 수정 후 동기화되는가?",
+        "두 기기 동시 편집 충돌을 정의했는가?"
+      ],
+      "questions": [
+        "Firestore 기본 캐시와 Room의 차이는?"
+      ],
+      "notes": "",
+      "refs": []
+    },
+    {
+      "id": "maps",
+      "group": "확장",
+      "title": "Google Maps Compose·마커",
+      "desc": "위도·경도를 저장한 항목을 지도에 표시하고 마커 탭으로 상세로 이동.",
+      "level": "확장",
+      "uses": [
+        "여행",
+        "지역 추천",
+        "분실물"
+      ],
+      "concept": [
+        "Maps Compose에서 GoogleMap과 Marker 등을 사용할 수 있습니다.",
+        "지도 표시만으로는 현재 위치 권한이 필요하지 않습니다.",
+        "장소 좌표를 데이터 모델에 넣고 API 키 제한과 사용량을 관리합니다."
+      ],
+      "steps": [
+        "고정된 좌표 2~3개를 먼저 지도에 표시합니다.",
+        "마커 선택 시 해당 데이터 상세로 이동합니다.",
+        "사용자 현재 위치는 별도 선택 기능으로 분리합니다."
+      ],
+      "code": "GoogleMap(modifier = Modifier.fillMaxSize()) {\n    Marker(\n        state = MarkerState(position = LatLng(37.5665, 126.9780)),\n        title = \"서울\"\n    )\n}",
+      "prompt": "내 앱에 Google Maps Compose 화면을 추가해 줘. 저장된 위도·경도를 Marker로 표시하고 클릭 시 해당 항목의 상세 화면으로 이동해 줘. 현재 위치 권한 없이 먼저 구현하고 API 키 제한도 안내해 줘.",
+      "checks": [
+        "두 장소의 마커가 구분되는가?",
+        "마커 탭 시 해당 기록을 여는가?",
+        "API 키가 공개 저장소에 노출되지 않는가?"
+      ],
+      "questions": [
+        "지도 마커와 지오코딩은 어떤 차이가 있는가?"
+      ],
+      "notes": "",
+      "refs": [
+        "MAPS"
+      ]
+    },
+    {
+      "id": "firebase_extension",
+      "group": "프로젝트 사례",
+      "title": "Travel Diary & Planner 예시",
+      "desc": "UI·알림·카메라 기능들을 한 앱에서 연결하는 참조 시나리오이며 필수 과제는 아닙니다.",
+      "level": "사례",
+      "uses": [
+        "여행"
+      ],
+      "concept": [
+        "여행 목록·등록·다이어리·사진·알림·지도·클라우드의 기능을 자연스럽게 연결할 수 있습니다.",
+        "학생은 자신의 프로젝트에서 필요한 기능만 골라 가져갈 수 있습니다."
+      ],
+      "steps": [
+        "여행 등록/조회: Compose + Room",
+        "날짜와 카테고리: DatePicker + Dropdown",
+        "사진과 알림: Activity Result + Notification",
+        "확장: Firestore + Storage + Maps"
+      ],
+      "code": "Compose → ViewModel → Repository → Room / Firebase\n                                ↘ AlarmManager → Receiver → Notification\nCompose → Camera/Photo Picker → File URI\nCompose → Maps Compose ← 좌표가 있는 기록",
+      "prompt": "Travel Diary & Planner 사례를 참고하되 내 프로젝트는 [프로젝트 설명]이야. 현재 기능과 필요한 Android 기술을 매핑하고 우선순위 3개만 추천해 줘. 데이터 모델과 기존 기능은 보존해 줘.",
+      "checks": [
+        "기존 기능과 새 기능이 충돌하지 않는가?",
+        "불필요하게 많은 기능을 추가하지 않았는가?"
+      ],
+      "questions": [
+        "우리 팀 앱에서 즉시 가치가 높은 기능은 무엇인가?"
+      ],
+      "notes": "",
+      "refs": []
+    },
+    {
+      "id": "project",
+      "group": "프로젝트 사례",
+      "title": "팀 프로젝트별 추천 기능",
+      "desc": "분실물·예산·일정·보드게임 등 프로젝트 유형별로 필요한 기능 선택.",
+      "level": "사례",
+      "uses": [
+        "팀 프로젝트"
+      ],
+      "concept": [
+        "분실물 앱: 사진 첨부·카테고리·등록 알림·지도(선택).",
+        "개인 예산 앱: Room·StateFlow·날짜 선택·차트(선택).",
+        "일정 취합 앱: 공유 입력·알림·권한·네트워크·Firebase(선택).",
+        "게임형 앱: Compose 상태·Navigation·DataStore·효과음/애니메이션(별도 학습)."
+      ],
+      "steps": [
+        "앱의 핵심 사용자 행동을 한 문장으로 정의합니다.",
+        "필수 기능 2개와 선택 기능 2개를 구분합니다.",
+        "필수 기능부터 구현하고 결과를 검증합니다."
+      ],
+      "code": "앱 목적 → 사용자 행동 → 필요한 Android 기능 → 데이터 모델 → 검증 기준",
+      "prompt": "우리 팀 프로젝트의 목적은 [설명]이야. 이 참고서의 Android 기능 중 꼭 필요한 것 3개와 제외할 기능 3개를 이유와 함께 제시해 줘. 필요한 기능만 작은 단위로 나눠 구현 계획을 짜 줘.",
+      "checks": [
+        "기술 자체가 목적이 되지 않는가?",
+        "사용자 가치가 분명한가?"
+      ],
+      "questions": [
+        "선택한 기능이 해결하는 사용자 불편은 무엇인가?"
+      ],
+      "notes": "",
+      "refs": []
+    },
+    {
+      "id": "review",
+      "group": "AI 개발 워크플로",
+      "title": "AI 프롬프트·리뷰·검증",
+      "desc": "AI를 코드 생성기가 아니라 변경 계획·설명·테스트를 수행하는 개발 보조자로 활용.",
+      "level": "공통",
+      "uses": [
+        "모든 프로젝트"
+      ],
+      "concept": [
+        "한 번에 전체 앱을 다시 작성하도록 요청하지 않습니다.",
+        "분석과 구현을 분리하고 변경 전후를 Git으로 관리합니다.",
+        "AI가 수행하지 않은 테스트를 수행했다고 주장하지 않도록 보고 체계를 만듭니다.",
+        "Firebase 키·개인정보·서비스 비밀을 프롬프트에 그대로 넣지 않습니다."
+      ],
+      "steps": [
+        "1. 요구사항과 완료 기준 작성",
+        "2. 파일 조사와 수정 계획 요청",
+        "3. 한 기능씩 구현·빌드",
+        "4. 에뮬레이터에서 성공/실패/권한 거부 테스트",
+        "5. 변경 이유를 학생 자신의 말로 설명"
+      ],
+      "code": "요구사항: [구체적으로]\n변경 범위: [화면·모듈]\n보존할 동작: [기존 기능]\n완료 조건: [테스트]\n보고: 수정 파일, 빌드 로그, 미검증 항목",
+      "prompt": "현재 프로젝트를 변경하기 전 분석 보고서부터 작성해 줘. 변경 파일과 위험을 먼저 알려 주고, 기능 구현은 작은 단계로 진행해 줘. 각 단계의 실제 검증 로그와 남은 문제를 IMPLEMENTATION_STATUS.md에 업데이트해 줘.",
+      "checks": [
+        "변경된 파일 목록을 확인했는가?",
+        "실패/거부 시나리오를 테스트했는가?",
+        "자기 말로 설명할 수 있는가?"
+      ],
+      "questions": [
+        "AI가 낸 코드를 검토할 때 가장 먼저 볼 세 가지는?"
+      ],
+      "notes": "",
+      "refs": []
+    },
+    {
+      "id": "resources",
+      "group": "참고자료",
+      "title": "공식 문서·자료 범위",
+      "desc": "확인된 강의자료와 공식 Android·Firebase·Maps 문서 연결.",
+      "level": "공통",
+      "uses": [
+        "모든 프로젝트"
+      ],
+      "concept": [
+        "자료 기반: 제공된 Retrofit·Weather App, UI·알림·카메라 강의자료와 Travel Diary AI 실습 강의안.",
+        "복습 단원: 이전 수업의 흐름을 바탕으로 재구성한 참고 설명. 모든 이전 수업의 PPT 원문을 대조한 것은 아닙니다.",
+        "버전이 바뀌는 Android API는 공식 문서를 우선 확인합니다."
+      ],
+      "steps": [
+        "강의 원본과 자신의 프로젝트 버전을 대조합니다.",
+        "공식 문서의 API 수준과 라이브러리 버전을 확인합니다.",
+        "결과를 학생 본인의 구현에 맞게 수정합니다."
+      ],
+      "code": "공식 문서 링크는 아래 ‘관련 링크’ 영역에서 확인하세요.",
+      "prompt": "현재 프로젝트의 AGP/Kotlin/Compose/Room/Hilt 버전을 분석하고, 내가 선택한 기능에 필요한 공식 Android 문서 링크와 버전 호환성을 정리해 줘.",
+      "checks": [
+        "사용한 출처가 공식 문서인가?",
+        "현재 SDK와 API가 호환되는가?"
+      ],
+      "questions": [
+        "문서의 코드가 지금 프로젝트에서 그대로 컴파일된다고 보장할 수 있는가?"
+      ],
+      "notes": "",
+      "refs": [
+        "NETWORK_LESSON",
+        "UI_SYSTEM_LESSON",
+        "ANDROID_NOTIFICATION",
+        "ANDROID_ALARM",
+        "FIREBASE_KTX",
+        "MAPS"
+      ]
+    }
+  ],
+  "refs": {
+    "NETWORK_LESSON": {
+      "label": "수업자료: Retrofit / Weather App",
+      "url": "",
+      "detail": "제공된 네트워크·날씨 앱 강의자료와 코드 읽기 가이드 기준"
+    },
+    "UI_SYSTEM_LESSON": {
+      "label": "수업자료: UI·알림·권한·카메라",
+      "url": "",
+      "detail": "제공된 UI·알림·권한·카메라 강의자료 기준"
+    },
+    "ANDROID_NOTIFICATION": {
+      "label": "Android 공식: 알림 런타임 권한",
+      "url": "https://developer.android.com/develop/ui/compose/notifications/notification-permission",
+      "detail": "Android 13+ POST_NOTIFICATIONS"
+    },
+    "ANDROID_ALARM": {
+      "label": "Android 공식: AlarmManager/정확한 알람",
+      "url": "https://developer.android.com/develop/background-work/services/alarms",
+      "detail": "정확한 알람 정책과 권한"
+    },
+    "FIREBASE_KTX": {
+      "label": "Firebase 공식: Kotlin 메인 모듈 이전",
+      "url": "https://firebase.google.com/docs/android/kotlin-migration",
+      "detail": "2025년 KTX 모듈 중단"
+    },
+    "MAPS": {
+      "label": "Google Maps 공식: Maps Compose",
+      "url": "https://developers.google.com/maps/documentation/android-sdk/maps-compose",
+      "detail": "GoogleMap 및 Marker"
+    }
+  }
+}
