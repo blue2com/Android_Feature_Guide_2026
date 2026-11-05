@@ -33,6 +33,7 @@ Kotlin / Jetpack Compose 기반 모바일 소프트웨어 수업의 주요 주�
 - `index.html`: 홈과 학습 페이지의 화면 껍데기
 - `style.css`: 화면 및 인쇄 스타일
 - `app.js`: 검색, 목차, 문서 화면, 복사, 답 확인 등 동작
+- `format.js`: 본문 자동 강조(굵게·색상·인라인 코드)와 코드 문법 색상
 - `data.json`: 학습 내용 원본 데이터
 - `lessons.js`: `data.json`과 동일한 내용(`window.GUIDE_DATA = …;`). 브라우저가 로컬 파일로 열 때도 데이터가 로드되도록 구성
 - `README.md`: 이 문서
@@ -40,6 +41,9 @@ Kotlin / Jetpack Compose 기반 모바일 소프트웨어 수업의 주요 주�
 ### 내용 수정 방법
 
 1. `data.json`을 수정합니다. 주제마다 `concept`, `setup`(선택), `steps`, `code`, `pitfalls`(선택), `prompt`, `checks`, `questions`, `answers`(질문과 같은 순서·개수), `refs`를 가집니다.
+   - 본문 강조는 자동으로 적용됩니다: API·클래스 이름(`StateFlow`, `viewModelScope.launch`), `@어노테이션`, `상수_이름`, 파일명, ‘따옴표 용어’, 경고 단어(반드시·금지·크래시 등), `용어: 설명` 형식의 앞 용어, 답의 첫 문장.
+   - 직접 강조하려면 `**굵게**`, `==형광 강조==`, `^^경고 강조^^`, `` `인라인 코드` ``를 사용합니다.
+   - 코드 블록(`code`, `setup`)은 Kotlin·Gradle·XML·toml 문법에 맞춰 자동으로 색이 입혀집니다(`format.js`).
 2. `lessons.js`를 다시 만듭니다(Git Bash 기준).
    ```bash
    { printf 'window.GUIDE_DATA = '; cat data.json; printf ';\n'; } > lessons.js
